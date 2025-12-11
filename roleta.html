@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, initial-scale=1.0">
+<title>Schalter Confraternização 2025 – Roleta Dupla</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #0A2345;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: #000;
+    }
+
+    h1 {
+        position: absolute;
+        top: 20px;
+        text-align: center;
+        width: 100%;
+        font-size: 36px;
+        font-weight: bold;
+        color: #FFFFFF;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+    }
+
+    /* --- PAINEL ORIGINAL --- */
+    .container {
+        margin-top: 80px;
+        width: 980px;
+        height: 520px;
+        max-width: 1500px;
+        max-height: 900px;
+        background: #FFFFFF;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 18px rgba(0,0,0,0.35);
+        display: flex;
+        gap: 20px;
+    }
+
+    .left {
+        width: 65%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .right {
+        width: 35%;
+        background: #F2F4F8; 
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.15);
+        overflow-y: auto;
+        max-height: 100%;
+        border-left: 4px solid #1F3B70;
+    }
+
+    textarea {
+        width: 100%;
+        height: 150px;
+        font-size: 20px; /* AUMENTADO */
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #1F3B70;
+        background: #FFFFFF;
+        color: #000;
+    }
+
+    button {
+        padding: 16px 25px;
+        font-size: 22px; /* AUMENTADO */
+        border: none;
+        background: #1F3B70;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 5px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #2E4F8F;
+        transform: scale(1.03);
+    }
+
+    .resultado {
+        margin-top: 15px;
+        font-size: 32px; /* AUMENTADO */
+        font-weight: bold;
+        text-align: center;
+        min-height: 40px;
+        color: #0A2345;
+    }
+
+    .timer {
+        font-size: 24px; /* AUMENTADO */
+        text-align: center;
+        margin-top: 10px;
+        color: #1F3B70;
+        font-weight: bold;
+    }
+
+    h2 {
+        text-align: center;
+        color: #0A2345;
+        font-size: 24px; /* AUMENTADO */
+    }
+
+    .itemHist {
+        background: #FFFFFF;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        font-size: 20px; /* AUMENTADO */
+        border-left: 4px solid #2E4F8F;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        color: #000;
+    }
+
+    /* 📌 Ajuste REAL para TOTENS VERTICAIS (tela em pé) */
+    @media screen and (orientation: portrait) and (min-height: 1000px) {
+        h1 {
+            font-size: 52px;
+        }
+
+        .container {
+            transform: scale(1.6);       /* AUMENTA TUDO PROPORCIONALMENTE */
+            transform-origin: top center;
+        }
+
+        textarea {
+            font-size: 28px;
+            height: 230px;
+        }
+
+        button {
+            font-size: 32px;
+            padding: 22px 40px;
+        }
+
+        .resultado {
+            font-size: 48px;
+        }
+
+        .timer {
+            font-size: 36px;
+        }
+
+        .itemHist {
+            font-size: 28px;
+        }
+
+        h2 {
+            font-size: 34px;
+        }
+    }
+    /* Ajuste automático para telas verticais (totem 32") */
+@media screen and (max-width: 1100px) {
+    .container {
+        width: 90%;
+        height: auto;
+        max-width: 95%;
+        flex-direction: column; /* fica em 1 coluna mas mantém o design */
+        align-items: center;
+    }
+
+    .left, .right {
+        width: 100%;
+    }
+
+    textarea {
+        height: 180px;
+        font-size: 28px;
+    }
+
+    .resultado {
+        font-size: 42px;
+    }
+
+    button {
+        font-size: 32px;
+        padding: 22px 30px;
+    }
+
+    h2 {
+        font-size: 32px;
+    }
+
+    .itemHist {
+        font-size: 26px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Schalter Confraternização 2025</h1>
+
+<div class="container">
+
+    <div class="left">
+        <div>
+            <h2>Participantes</h2>
+            <textarea id="nomes" placeholder="Digite um nome por linha..."></textarea>
+
+            <h2 style="margin-top: 15px;">Prêmios</h2>
+            <textarea id="premios" placeholder="Digite um prêmio por linha..."></textarea>
+        </div>
+
+        <div class="timer" id="timer">Pronto para sortear...</div>
+
+        <button id="botaoSortear" onclick="sortearTudo()">🎉 Sortear Nome + Prêmio</button>
+
+        <div class="resultado" id="resultado_final"></div>
+    </div>
+
+    <div class="right" id="historicoBox">
+        <h2>Histórico</h2>
+        <div id="historico"></div>
+    </div>
+
+</div>
+
+<script>
+let tempo = 3;
+let contadorAtivo = false;
+
+/* Limpa linhas vazias automaticamente */
+document.getElementById("nomes").addEventListener("blur", limparVazios);
+document.getElementById("premios").addEventListener("blur", limparVazios);
+
+function limparVazios(e) {
+    const linhas = e.target.value
+        .split("\n")
+        .map(x => x.trim())
+        .filter(x => x);
+    e.target.value = linhas.join("\n");
+}
+
+/* Validação */
+function validarEntradas() {
+    const nomes = document.getElementById("nomes").value
+        .split("\n").map(x => x.trim()).filter(x => x);
+
+    const premios = document.getElementById("premios").value
+        .split("\n").map(x => x.trim()).filter(x => x);
+
+    if (nomes.length === 0) {
+        alert("❌ Você precisa adicionar pelo menos UM nome para iniciar o sorteio.");
+        return false;
+    }
+
+    if (premios.length === 0) {
+        alert("❌ Você precisa adicionar pelo menos UM prêmio para iniciar o sorteio.");
+        return false;
+    }
+
+    return true;
+}
+
+/* Contagem regressiva */
+function iniciarContagem(callback) {
+    if (contadorAtivo) return;
+    contadorAtivo = true;
+
+    document.getElementById("botaoSortear").disabled = true;
+
+    tempo = 3;
+    const timerEl = document.getElementById("timer");
+    timerEl.innerText = "⏳ Sorteando em: " + tempo;
+
+    const interval = setInterval(() => {
+        tempo--;
+        if (tempo < 1) {
+            clearInterval(interval);
+            timerEl.innerText = "🎯 Sorteado!";
+            contadorAtivo = false;
+            callback();
+            document.getElementById("botaoSortear").disabled = false;
+        } else {
+            timerEl.innerText = "⏳ Sorteando em: " + tempo;
+        }
+    }, 1000);
+}
+
+/* Sorteio */
+function sortearTudo() {
+
+    if (!validarEntradas()) return;
+
+    iniciarContagem(() => {
+
+        let nomes = document.getElementById("nomes").value
+            .split("\n").map(x => x.trim()).filter(x => x);
+
+        let premios = document.getElementById("premios").value
+            .split("\n").map(x => x.trim()).filter(x => x);
+
+        if (nomes.length === 0 || premios.length === 0) {
+            document.getElementById("resultado_final").innerHTML =
+                `<span style="color:#C00000; font-size:30px;">❌ Acabaram os nomes ou prêmios!</span>`;
+            return;
+        }
+
+        const idxNome = Math.floor(Math.random() * nomes.length);
+        const idxPremio = Math.floor(Math.random() * premios.length);
+
+        const nome = nomes[idxNome];
+        const premio = premios[idxPremio];
+
+        nomes.splice(idxNome, 1);
+        premios.splice(idxPremio, 1);
+
+        document.getElementById("nomes").value = nomes.join("\n");
+        document.getElementById("premios").value = premios.join("\n");
+
+        document.getElementById("resultado_final").innerHTML =
+            `🎉 <b>${nome}</b> ganhou <b>${premio}</b>!`;
+
+        const div = document.createElement("div");
+        div.className = "itemHist";
+        div.innerText = `${nome} GANHOU ${premio}`;
+
+        const hist = document.getElementById("historico");
+        hist.appendChild(div);
+
+        /* Evita histórico infinito */
+        if (hist.children.length > 200) {
+            hist.removeChild(hist.firstChild);
+        }
+
+        const box = document.getElementById("historicoBox");
+        box.scrollTop = box.scrollHeight;
+    });
+}
+</script>
+
+</body>
+</html>
